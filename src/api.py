@@ -831,6 +831,94 @@ class TreeSitterSelectAncestorCommand(sublime_plugin.TextCommand):
             scroll_to_region(new_region, self.view)
 
 
+
+def get_cursor_region(view):
+    sel = view.sel()
+    region = None
+    for r in sel:
+        region = r
+        break
+    return region
+
+
+
+def get_largest_node_under_cursor(view):
+    cursor_region = get_cursor_region(view)
+    curr_node = get_node_spanning_region(cursor_region, view.buffer_id())
+
+    ancestors = get_ancestors(curr_node)
+
+    for ancestor in ancestors:
+        ancestor_region = get_node_region(ancestor, view)
+        if (ancestor_region[0] == cursor_region.a):
+            curr_node = ancestor
+        else:
+            break
+
+    return curr_node
+
+
+def get_parent_block(node, view):
+    ancestors = get_ancestors(node)
+
+    curr_node = node
+    for ancestor in ancestors:
+        if (ancestor.type == "block"):
+            return ancestor
+
+    return curr_node
+
+
+def get_node_region(node, view):
+    return (view.text_point_utf8(*node.start_point), view.text_point_utf8(*node.end_point),)
+
+
+def jump_to_node_start(node, view):
+    pos = get_node_region(node, view)
+    region = sublime.Region(pos[0])
+    view.sel().clear()
+    view.sel().add(region)
+    view.show_at_center(region)
+
+
+class TreeSitterGotoParentCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        curr_node = get_largest_node_under_cursor(self.view)
+        if (curr_node == None):
+            return
+
+        next_node = curr_node.parent
+        jump_to_node_start(next_node, self.view)
+
+
+class TreeSitterGotoNextSiblingCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        this = get_largest_node_under_cursor(self.view)
+        next_sibling = this.next_sibling
+        
+        if (next_sibling):
+            jump_to_node_start(next_sibling, self.view)
+        else:
+            print(">>>>>>> No sibling")
+
+
+class TreeSitterDebugCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        this = get_largest_node_under_cursor(self.view)
+        
+        next_sibling = this.next_sibling
+        jump_to_node_start(next_sibling, self.view)
+
+
+class fun():
+    """
+    Find 
+    """
+
+    def run():
+        sel = 1
+
+
 class TreeSitterSelectSiblingCommand(sublime_plugin.TextCommand):
     """
     Find node spanning selected region, then find its next or previous sibling (depending on value of `forward`), and

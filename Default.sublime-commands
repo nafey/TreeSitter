@@ -44,6 +44,18 @@
     "command": "tree_sitter_goto_symbol",
   },
   {
+    "caption": "TreeSitter: Debug",
+    "command": "tree_sitter_debug",
+  },
+  {
+    "caption": "TreeSitter: Goto Parent",
+    "command": "tree_sitter_goto_parent",
+  }, 
+  {
+    "caption": "TreeSitter: Goto Next Sibling",
+    "command": "tree_sitter_goto_next_sibling",
+  }, 
+  {
     "caption": "TreeSitter: Query Symbol",
     "command": "tree_sitter_query_symbol",
   },

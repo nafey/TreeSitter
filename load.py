@@ -20,6 +20,9 @@ from .src.api import (  # noqa: F401, E402
     TreeSitterSelectSymbolsCommand,
     TreeSitterShowNodeUnderSelectionCommand,
     TreeSitterToggleShowNodeUnderSelectionCommand,
+    TreeSitterGotoNextSiblingCommand,
+    TreeSitterDebugCommand,
+    TreeSitterGotoParentCommand,
 )
 from .src.core import (  # noqa: F401, E402
     TreeSitterEventListener,
